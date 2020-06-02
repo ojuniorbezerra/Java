@@ -6,7 +6,7 @@ package reference;
 public class ReferenceInstance {
 
     public void display(){
-        System.out.print("Reference Interface");
+        System.out.println("Reference Interface");
     }
 
     public static void main(String[] args){
@@ -14,6 +14,11 @@ public class ReferenceInstance {
         ReferenceInstance ri = new ReferenceInstance();
         MyInterface myInterface = ri::display;
         myInterface.display();
+
+
+        HelloInterface testHello = Hello::new;
+
+        testHello.display("Text reference to constructor");
 
     }
 }
