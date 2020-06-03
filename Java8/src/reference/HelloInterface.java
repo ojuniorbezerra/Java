@@ -6,5 +6,4 @@ package reference;
 @FunctionalInterface
 public interface HelloInterface {
     Hello display(String text);
-
 }
