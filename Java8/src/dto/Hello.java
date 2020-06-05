@@ -1,4 +1,4 @@
-package reference;
+package dto;
 
 /**
  * Created by Junior on 02/06/2020.

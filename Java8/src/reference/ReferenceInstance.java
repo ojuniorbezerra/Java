@@ -1,5 +1,7 @@
 package reference;
 
+import dto.Hello;
+
 /**
  * Created by Junior on 01/06/2020.
  */
