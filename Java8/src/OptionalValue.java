@@ -59,7 +59,7 @@ public class OptionalValue {
         names.add("Junior");
         names.add(null);
         names.add("Gabi");
-        
+
 
         try {
             Optional toReturn = Optional.empty();

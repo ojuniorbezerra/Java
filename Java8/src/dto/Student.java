@@ -13,6 +13,10 @@ public class Student{
         this.age = age;
     }
 
+    public int getAge() {
+        return age;
+    }
+
     public String getName() {
         return name;
     }
