@@ -8,6 +8,8 @@ import java.io.FileReader;
  */
 public class JavaNashorn {
 
+    private static String HOME = System.getProperty("user.home");
+
     public static void main(String[] args) throws FileNotFoundException, ScriptException, NoSuchMethodException {
 
         ScriptEngine se = new ScriptEngineManager().getEngineByName("Nashorn");
