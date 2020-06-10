@@ -1,13 +1,9 @@
-import javax.script.ScriptException;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 /**
  * Created by Junior on 09/06/2020.
@@ -17,14 +13,80 @@ public class JavaIO {
 
     public static void main(String[] args) throws IOException {
 
-//        checkFileAndDirectoryNio2();
+        checkFileAndDirectoryNio();
 
-//        createFileAndDirectoryNio2();
+        createFileAndDirectoryNio();
 
-        createTemporaryFileNio2();
+        createTemporaryFileNio();
+        
+        deleteFileNio();
+
+        copyFileNio();
+
+        moviFileNio();
     }
 
-    private static void createTemporaryFileNio2() throws IOException {
+    private static void moviFileNio() throws IOException {
+
+        Path dir1 = Paths.get(
+                HOME + "/firstdir_" + UUID.randomUUID().toString());
+        Path dir2 = Paths.get(
+                HOME + "/otherdir_" + UUID.randomUUID().toString());
+
+        Files.createDirectory(dir1);
+        Files.createDirectory(dir2);
+
+        Path file1 = dir1.resolve("filetocopy.txt");
+        Path file2 = dir2.resolve("filetocopy.txt");
+
+        Files.createFile(file1);
+        Files.createFile(file2);
+
+//        Files.move(file1, file2);//FileAlreadyExistsException if p2 exist
+
+        Files.move(file1, file2, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    private static void copyFileNio() throws IOException {
+        Path p1 = Paths.get(HOME+"/teste.txt");
+        if(Files.notExists(p1)) Files.createFile(p1);
+
+        Path p2 = Paths.get(HOME+"/teste2.txt");
+        if(Files.notExists(p2)) Files.createFile(p2);
+
+//        Files.copy(p1, p2);//FileAlreadyExistsException if p2 exist
+        Files.copy(p1, p2, StandardCopyOption.REPLACE_EXISTING);
+
+
+        Path directory = Paths.get(HOME+"/test");
+        if(Files.notExists(directory)) Files.createDirectory(directory);
+
+        Path directory2 = Paths.get(HOME+"/test2");
+
+        Files.copy(directory, directory2);
+
+    }
+
+    private static void deleteFileNio() throws IOException {
+        Path p = Paths.get(HOME+"/teste.txt");
+        if(Files.notExists(p)) Files.createFile(p);
+        Path toDelete = p;
+
+//        if(Files.exists(toDelete)) Files.delete(p);
+        System.out.println(Files.deleteIfExists(p));//true
+
+        Path dir = Paths.get(HOME+"/teste");
+        if(Files.notExists(dir)) Files.createDirectory(dir);
+
+        Path subDir = dir.resolve("texte.txt");
+
+        Files.createFile(subDir);
+
+        Files.delete(dir);//DirectoryNotEmptyException
+
+    }
+
+    private static void createTemporaryFileNio() throws IOException {
         Path p = Paths.get(HOME+"/");
 
         Files.createTempFile(p, "test", null);
@@ -35,7 +97,7 @@ public class JavaIO {
         System.out.println(Files.isWritable(fileTemp));//true
     }
 
-    private static void createFileAndDirectoryNio2() throws IOException {
+    private static void createFileAndDirectoryNio() throws IOException {
         Path p = Paths.get(HOME+"/Downloads/"+ UUID.randomUUID().toString() + ".txt");
 
         if(Files.notExists(p)){
@@ -61,7 +123,7 @@ public class JavaIO {
 
     }
 
-    public static void checkFileAndDirectoryNio2(){
+    public static void checkFileAndDirectoryNio(){
         Path path = Paths.get(HOME);
         path.forEach(System.out::println);
 
