@@ -20,7 +20,6 @@ public class OptionalValue {
 
     public static void main(String[] args){
 
-
         try {
             Optional name = Optional.of(findNameOfClient(5l));
             System.out.println(name.isPresent());
