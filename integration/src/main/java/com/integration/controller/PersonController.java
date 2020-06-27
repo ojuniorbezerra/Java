@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Junior on 25/06/2020.
  */
 @RestController
-public class PersonController {
+public final class PersonController {
 
 
     private PersonService personService;
