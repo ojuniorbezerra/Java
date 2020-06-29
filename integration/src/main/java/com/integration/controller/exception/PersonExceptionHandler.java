@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class PersonExceptionHandler {
 
     @ExceptionHandler(NotExistException.class)
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public void handleNotExist(){}
 
 }
