@@ -1,3 +1,4 @@
+package main;
 import dto.Student;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 

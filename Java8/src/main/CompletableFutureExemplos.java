@@ -1,3 +1,4 @@
+package main;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -39,6 +40,8 @@ public class CompletableFutureExemplos {
                 .exceptionally(throwable -> handleError(throwable))
                 .thenAccept(System.out::println)
                 .join();
+
+
 
     }
 

@@ -1,3 +1,4 @@
+package main;
 import javax.script.*;
 import java.io.File;
 import java.io.FileNotFoundException;
