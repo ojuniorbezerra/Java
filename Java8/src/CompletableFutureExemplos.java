@@ -34,10 +34,24 @@ public class CompletableFutureExemplos {
         //---------------------- EXCEPTION  -----------------------------
 //        CompletableFuture.runAsync(() -> exceptionProcess());
 //           with join() you can see the exception in the console
+
+        CompletableFuture.supplyAsync(() -> exceptionProcessReturn())
+                .exceptionally(throwable -> handleError(throwable))
+                .thenAccept(System.out::println)
+                .join();
+
+    }
+
+    public static int handleError(Throwable throwable){
+        return 100;
     }
 
     private static void exceptionProcess() {
         throw new RuntimeException();
+    }
+    private static int exceptionProcessReturn() {
+        exceptionProcess();
+        return 500;
     }
 
     public static int currentThreadAnalasy(){
