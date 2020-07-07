@@ -1,8 +1,7 @@
 package com.integration.controller;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import java.util.Optional;
 
@@ -10,11 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
-import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,30 +26,27 @@ import com.integration.service.PersonService;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureJsonTesters
-@WebMvcTest(PersonController.class)
-public class PersonControllerMockWithContextTest {
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+public class PersonControllerMockRestTemplateTest {
+
+	 @Autowired
+	 private TestRestTemplate template;	
+
 	
 	@Autowired
     private MockMvc mvc;
     
     @MockBean
     private PersonService personService;
-
-    @Autowired
-    private JacksonTester<Person> jsonPerson;
-	
-    @WithMockUser(username = "test")
+    
     @Test
     public void canRetrieveByIdWhenExists() throws Exception {
     	given(personService.findPersonById(1l)).willReturn(Optional.of(new Person()));
     	
-    	MockHttpServletResponse response = mvc.perform(get("/persons/1")).andReturn().getResponse();
     	
-    	 assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
-         assertThat(response.getContentAsString()).isEqualTo(
-                 jsonPerson.write(new Person()).getJson()
-         );
-    	
-    	
+    	 ResponseEntity<Person> result = template.withBasicAuth("actuator", "actuator123")
+    	          .getForEntity("/persons/1", Person.class);
+    	        assertEquals(HttpStatus.OK, result.getStatusCode());
     }
 }

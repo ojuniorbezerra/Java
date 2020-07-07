@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,12 +27,10 @@ import com.integration.service.PersonService;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureJsonTesters
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 public class PersonControllerMockWithWebEnvironmentTest {
 
-	
-	
 	@Autowired
     private MockMvc mvc;
     
@@ -40,7 +40,7 @@ public class PersonControllerMockWithWebEnvironmentTest {
     @Autowired
     private JacksonTester<Person> jsonPerson;
     
-    
+    @WithMockUser(username="test")
     @Test
     public void canRetrieveByIdWhenExists() throws Exception {
     	given(personService.findPersonById(1l)).willReturn(Optional.of(new Person()));
