@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,14 +25,30 @@ public class UserService {
 	
 	Logger logger = LoggerFactory.getLogger(UserService.class);
 	
-	public CompletableFuture<List<User>> saveUser(MultipartFile file) throws Exception{
+	public void saveUserThread( MultipartFile[] files) throws Exception{
 		long start = System.currentTimeMillis();
-		List<User> users = parseCSVFile(file);
-		logger.info("saving list of users, {}" , users.size(), ""+Thread.currentThread());
-		List<User> usersReturn = userRepository.saveAll(users);
+		for(MultipartFile file : files){
+			CompletableFuture.runAsync(() -> saveUser(file));
+		}
 		long end = System.currentTimeMillis();
 		logger.info("Total time {}", (end - start));
-		return CompletableFuture.completedFuture(usersReturn);
+	}
+	
+	
+	public List<User> saveUser(MultipartFile file){
+		try {
+			List<User> users = parseCSVFile(file);
+			List<User> usersReturn = userRepository.saveAll(users);
+			return usersReturn;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public CompletableFuture<List<User>> findAllUsers() {
+		List<User> users = userRepository.findAll();
+		return CompletableFuture.completedFuture(users);
 	}
 	
    private List<User> parseCSVFile(final MultipartFile file) throws Exception {
