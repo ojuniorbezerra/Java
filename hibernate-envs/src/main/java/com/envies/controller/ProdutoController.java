@@ -42,7 +42,6 @@ public class ProdutoController {
 		return new ResponseEntity<List<Produto>>(produtoService.findAll(), HttpStatus.OK);
 	}
 	
-	
 	@RequestMapping(value = "/alteraEstoque", method = RequestMethod.PUT)
     public ResponseEntity<Produto> alteraEstoque(@RequestBody Produto produto) {
         Produto produtoObject = produtoService.findBySku(produto.getSku());

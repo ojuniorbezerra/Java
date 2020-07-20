@@ -7,10 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.envers.Audited;
+
 import lombok.Data;
 
 @Entity
 @Data
+@Audited
 @Table(name = "tb_produto")
 public class Produto {
 	
