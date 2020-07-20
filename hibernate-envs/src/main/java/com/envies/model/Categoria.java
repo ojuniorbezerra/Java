@@ -26,7 +26,7 @@ public class Categoria {
 	private String nome;
 	
 	@ManyToMany
-	@JoinTable(name = "categoria_produto")
+	@JoinTable(name = "tb_categoria_produto")
 	private List<Produto> produtos;
 }
 
