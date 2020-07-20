@@ -11,10 +11,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.envers.Audited;
+
 import lombok.Data;
 
 @Entity
 @Data
+@Audited
 @Table(name = "tb_categoria")
 public class Categoria {
 
