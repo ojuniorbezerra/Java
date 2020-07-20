@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.envies.model.EntidadeComRevisao;
 import com.envies.model.Produto;
+import com.envies.repository.GenericRevisionRepository;
 import com.envies.service.ProdutoService;
 
 @Controller
@@ -20,13 +22,15 @@ import com.envies.service.ProdutoService;
 public class ProdutoController {
 
 	private ProdutoService produtoService;
-	
+    private GenericRevisionRepository genericRevisionRepository;
+
 	@Autowired
-	public ProdutoController(ProdutoService produtoService) {
+	public ProdutoController(ProdutoService produtoService, GenericRevisionRepository genericRevisionRepository) {
 		super();
 		this.produtoService = produtoService;
+		this.genericRevisionRepository = genericRevisionRepository;
 	}
-	
+
 	@RequestMapping(value = "/novo", method = RequestMethod.POST)
 	public ResponseEntity<Produto> criarProduto(@RequestBody Produto produto){
 		Produto pReturn = produtoService.save(produto);
@@ -64,6 +68,16 @@ public class ProdutoController {
         Produto p = produtoService.findBySku(sku);
         if(p != null)
             return new ResponseEntity<Produto>(p, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    
+    @RequestMapping("/revisoes/{sku}")
+    public ResponseEntity<List<EntidadeComRevisao<Produto>>> getRevisions(@PathVariable String sku) {
+        Produto p = produtoService.findBySku(sku);
+        List<EntidadeComRevisao<Produto>> revisoes = genericRevisionRepository.listaRevisoes(p.getId(),Produto.class);
+        if(revisoes != null)
+            return new ResponseEntity<List<EntidadeComRevisao<Produto>>>(revisoes, HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
