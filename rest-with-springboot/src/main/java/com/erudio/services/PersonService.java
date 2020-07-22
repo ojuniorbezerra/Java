@@ -4,52 +4,50 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.erudio.exception.ResourceNotFoundException;
 import com.erudio.model.Person;
+import com.erudio.repository.PersonRepository;
 
 @Service
 public class PersonService {
 
-	private final AtomicLong counter = new AtomicLong();
+
+	private PersonRepository personRepository;
+	
+
+	@Autowired
+	public PersonService(PersonRepository personRepository) {
+		super();
+		this.personRepository = personRepository;
+	}
 
 	public Person create(Person person) {
-		return person;
+		return personRepository.save(person);
 	}
 
 	public Person update(Person person) {
-		return person;
+		Person entity = personRepository.findById(person.getId()).get();
+		entity.setFirstName(person.getFirstName());
+		entity.setLastName(person.getLastName());
+		entity.setAddress(person.getAddress());
+		entity.setGender(person.getGender());
+		return personRepository.save(entity);
 	}
 	
-	public void delete(String id) {
-
+	public void delete(Long id) {
+		personRepository.deleteById(id);
 	}
-	public Person findById(String id) {
-		Person person = new Person();
-		person.setId(counter.incrementAndGet());
-		person.setFirstName("Junior");
-		person.setLastName("Bezerra");
-		person.setAddress("Ernesto Pedro");
-		person.setGender("M");
-		return person;
+	
+	public Person findById(Long id) {
+		return personRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this id"));
 	}
 	
 	
 	public List<Person> findAll() {
-		List<Person> persons = new ArrayList<Person>();
-		for (int i = 0; i < 15; i++) {
-			persons.add(mockPerson(i));
-		}
-		return persons;
+		return personRepository.findAll();
 	}
 	
-	private Person mockPerson(int i) {
-		Person person = new Person();
-		person.setId(counter.incrementAndGet());
-		person.setFirstName("Junior " + i);
-		person.setLastName("Bezerra");
-		person.setAddress("Ernesto Pedro");
-		person.setGender("M");
-		return person;
-	}
 }
