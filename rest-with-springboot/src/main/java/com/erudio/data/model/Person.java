@@ -1,4 +1,4 @@
-package com.erudio.model;
+package com.erudio.data.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

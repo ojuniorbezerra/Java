@@ -1,14 +1,12 @@
 package com.erudio.services;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.erudio.data.model.Person;
 import com.erudio.exception.ResourceNotFoundException;
-import com.erudio.model.Person;
 import com.erudio.repository.PersonRepository;
 
 @Service
