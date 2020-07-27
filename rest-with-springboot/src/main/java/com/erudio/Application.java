@@ -17,7 +17,6 @@ public class Application {
 
 	public static void main(String[] args) {	
 		SpringApplication.run(Application.class, args);
-		//new SpringApplicationBuilder(Application.class).web(WebApplicationType.REACTIVE).run(args);
 	}
 	
 
@@ -36,7 +35,7 @@ public class Application {
 	    return new Docket(DocumentationType.SWAGGER_2)
 	        .groupName("api-1.1")
 	        .select()
-	            .apis(RequestHandlerSelectors.basePackage("com.erudio.controller.v1"))
+	            .apis(RequestHandlerSelectors.basePackage("com.erudio.v1"))
 	            .paths(PathSelectors.any())
 	        .build()
 	        .apiInfo(new ApiInfoBuilder().version("1.1").title("Person API").description("Documentation Person API v1.1").build());
