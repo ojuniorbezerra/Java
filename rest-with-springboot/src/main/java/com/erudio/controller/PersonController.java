@@ -1,10 +1,10 @@
 package com.erudio.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,31 +26,31 @@ public class PersonController {
 	@Autowired
 	private PersonService personService;
 	
-	@GetMapping(value = "/{id}")
+	@GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public PersonVO findById(@PathVariable Long id) {
 		PersonVO vo = new PersonVO(); 
 		BeanUtils.copyProperties(personService.findById(id), vo);
 		return vo;
 	}
 	
-	@GetMapping("/")
+	@GetMapping(produces = { "application/json", "application/xml"})
 	public List<Person> findAll() {
-		int scores[] = new int[10];
-		Arrays.asList(scores);
 		return personService.findAll();
 	}
 	
-	@PostMapping(value = "/")
+	@PostMapping(value = "/", produces = {"application/json", "application/xml"},
+			consumes = {"application/json", "application/xml"})
 	public Person create(@RequestBody Person person) {
 		return personService.create(person);
 	}
 	
-	@PutMapping("/")
+	@PutMapping(value = "/", produces = {"application/json", "application/xml"},
+			consumes = {"application/json", "application/xml"})
 	public Person update(@RequestBody Person person) {
 		return personService.update(person);
 	}
 	
-	@DeleteMapping("/{id}")
+	@DeleteMapping(value = "/{id}")
 	public ResponseEntity delete(@PathVariable Long id) {
 		personService.delete(id);
 		return ResponseEntity.ok().build();
