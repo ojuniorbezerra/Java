@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import com.erudio.data.model.Person;
 import com.erudio.data.vo.PersonVO;
 import com.erudio.services.PersonService;
@@ -33,20 +34,22 @@ public class PersonController {
 		return vo;
 	}
 	
-	@GetMapping(produces = { "application/json", "application/xml"})
-	public List<Person> findAll() {
+	@GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public List<PersonVO> findAll() {
 		return personService.findAll();
 	}
 	
-	@PostMapping(value = "/", produces = {"application/json", "application/xml"},
-			consumes = {"application/json", "application/xml"})
-	public Person create(@RequestBody Person person) {
-		return personService.create(person);
+	@PostMapping(value = "/", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public PersonVO create(@RequestBody PersonVO person) {
+		PersonVO personVO = personService.create(person);
+		personVO.add(linkTo(methodOn(PersonController.class).findById(personVO.getKey())).withSelfRel());
+		return personVO;
 	}
 	
-	@PutMapping(value = "/", produces = {"application/json", "application/xml"},
-			consumes = {"application/json", "application/xml"})
-	public Person update(@RequestBody Person person) {
+	@PutMapping(value = "/", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
+			consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+	public PersonVO update(@RequestBody PersonVO person) {
 		return personService.update(person);
 	}
 	

@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.erudio.converter.DozerConverter;
 import com.erudio.data.model.Person;
+import com.erudio.data.vo.PersonVO;
 import com.erudio.exception.ResourceNotFoundException;
 import com.erudio.repository.PersonRepository;
 
@@ -21,31 +23,37 @@ public class PersonService {
 		super();
 		this.personRepository = personRepository;
 	}
-
-	public Person create(Person person) {
-		return personRepository.save(person);
+	
+	public PersonVO create(PersonVO person) {
+		Person entity = DozerConverter.parseObject(person, Person.class);
+		PersonVO vo = DozerConverter.parseObject(personRepository.save(entity), PersonVO.class);
+		return vo;
 	}
 
-	public Person update(Person person) {
-		Person entity = personRepository.findById(person.getId()).get();
+	public PersonVO update(PersonVO person) {
+		Person entity = personRepository.findById(person.getKey())
+				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 		entity.setFirstName(person.getFirstName());
 		entity.setLastName(person.getLastName());
 		entity.setAddress(person.getAddress());
 		entity.setGender(person.getGender());
-		return personRepository.save(entity);
+
+		PersonVO vo = DozerConverter.parseObject(personRepository.save(entity), PersonVO.class);
+		return vo;
 	}
 	
 	public void delete(Long id) {
 		personRepository.deleteById(id);
 	}
 	
-	public Person findById(Long id) {
-		return personRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this id"));
+	public PersonVO findById(Long id) {
+		 Person entity = personRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this id"));
+		 return DozerConverter.parseObject(entity, PersonVO.class);
 	}
 	
 	
-	public List<Person> findAll() {
-		return personRepository.findAll();
-	}
+	public List<PersonVO> findAll() {
+		return DozerConverter.parseListObjects(personRepository.findAll(), PersonVO.class);
+	}	
 	
 }
