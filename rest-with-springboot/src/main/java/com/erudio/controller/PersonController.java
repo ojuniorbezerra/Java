@@ -20,6 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.erudio.data.vo.PersonVO;
 import com.erudio.services.PersonService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@Api(value = "Person EndPoint", tags = {"PersonEndPoint"})
 @RestController
 @RequestMapping("/person/v1.0")
 public class PersonController {
@@ -27,6 +31,7 @@ public class PersonController {
 	@Autowired
 	private PersonService personService;
 	
+	@ApiOperation(value = "find all api operation")
 	@GetMapping(value = "/{id}", produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
 	public PersonVO findById(@PathVariable Long id) {
 		PersonVO personVO = personService.findById(id);
