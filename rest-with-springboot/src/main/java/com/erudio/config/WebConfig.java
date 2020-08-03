@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.erudio.convertion.serealization.YamlJackson2HttpMessageConverter;
 
 @Configuration
-@EnableWebMvc
+//@EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
 
 private static final MediaType MEDIA_TYPE_YML = MediaType.valueOf("application/x-yaml");

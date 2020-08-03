@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.erudio.data.model.Person;
+import com.erudio.data.vo.PersonVO;
 import com.erudio.services.PersonService;
 
 @RestController
@@ -20,7 +20,7 @@ public class PersonV11Controller {
 	
 	
 	@GetMapping("/")
-	public List<Person> findAll() {
+	public List<PersonVO> findAll() {
 		int scores[] = new int[10];
 		Arrays.asList(scores);
 		return personService.findAll();
